@@ -784,7 +784,7 @@
       <div class="logo">
         <div class="logo-icon">📈</div>
         <div>
-          <div class="logo-text">SCALP JOURNAL</div>
+          <div class="logo-text">JOURNAL</div>
           <div class="logo-sub">TRADING LOG 2026</div>
         </div>
       </div>
@@ -870,6 +870,12 @@
             <label class="form-label">Instrumento</label>
             <input type="text" id="tradeNote" placeholder="NQ, ES, BTC...">
           </div>
+        </div>
+        <div class="form-group" style="margin-bottom:8px" id="accountSelectorWrap">
+          <label class="form-label">Cuenta</label>
+          <select id="tradeAccount">
+            <option value="">— Sin cuenta —</option>
+          </select>
         </div>
         <button class="btn btn-primary" onclick="addTrade()">+ AGREGAR OPERACIÓN</button>
       </div>
@@ -1165,22 +1171,42 @@ function refreshAll(){
 // ══════════════════════════════════════════════
 //  ACCOUNTS
 // ══════════════════════════════════════════════
+
+// Compute total P&L for an account by summing all trades tagged with its id
+function computeAccountPnl(accId){
+  let total=0;
+  Object.values(data).forEach(dayObj=>{
+    (dayObj.trades||[]).forEach(t=>{
+      if(t.accountId===accId) total+=t.amount;
+    });
+  });
+  return total;
+}
+
 function renderAccounts(){
   const list=document.getElementById('accountsList');
   list.innerHTML='';
 
   if(accounts.length===0){
     list.innerHTML='<div class="empty-accounts">Sin cuentas.<br>Agregá una abajo.</div>';
+    updateAccountSelector();
     return;
   }
 
   accounts.forEach(acc=>{
     const balance = parseFloat(acc.balance)||0;
     const target  = parseFloat(acc.target)||0;
-    const pnl     = parseFloat(acc.pnl||0);
+    // Always compute live from actual trades
+    const pnl     = computeAccountPnl(acc.id);
     const current = balance + pnl;
     let progressPct = 0;
-    if(target>0 && target>balance) progressPct=Math.min(100,Math.max(0,(pnl/(target-balance))*100));
+    // Progress toward target: target is the GOAL balance (e.g. $55000 from $50000)
+    if(target>0 && target>balance){
+      progressPct=Math.min(100,Math.max(0,(pnl/(target-balance))*100));
+    } else if(target>0 && target<=balance){
+      // target already below or equal starting balance — show 100%
+      progressPct=100;
+    }
 
     const card=document.createElement('div');
     card.className='account-card';
@@ -1197,23 +1223,44 @@ function renderAccounts(){
       </div>
       ${acc.broker?`<div class="account-broker">${esc(acc.broker)}</div>`:''}
       <div class="account-balance-row">
-        <span class="account-balance-label">BALANCE</span>
+        <span class="account-balance-label">BALANCE ACTUAL</span>
         <span class="account-balance" style="color:${acc.color||'#7c6fff'}">$${current.toFixed(2)}</span>
       </div>
       <div class="account-pnl-row">
-        <span class="account-pnl-label">P&L TOTAL</span>
+        <span class="account-pnl-label">P&L TRADES</span>
         <span class="account-pnl ${pnlClass(pnl)}">${formatPnl(pnl,false)}</span>
       </div>
       ${target>0?`
-      <div class="account-progress-bar">
+      <div class="account-progress-bar" style="margin-top:8px">
         <div class="account-progress-fill" style="width:${progressPct}%;background:${acc.color||'#7c6fff'}"></div>
       </div>
       <div style="font-size:9px;color:var(--text-dim);font-family:'Space Mono',monospace;margin-top:3px;text-align:right">
-        Obj: $${target.toFixed(0)} · ${progressPct.toFixed(0)}%
+        Obj: $${target.toFixed(2)} · ${progressPct.toFixed(1)}%
       </div>`:''}
     `;
     list.appendChild(card);
   });
+
+  updateAccountSelector();
+}
+
+// Populate the <select> in the trade modal
+function updateAccountSelector(){
+  const sel=document.getElementById('tradeAccount');
+  if(!sel) return;
+  const prev=sel.value;
+  sel.innerHTML='<option value="">— Sin cuenta —</option>';
+  accounts.forEach(acc=>{
+    const opt=document.createElement('option');
+    opt.value=acc.id;
+    opt.textContent=acc.name+(acc.broker?' ('+acc.broker+')':'');
+    sel.appendChild(opt);
+  });
+  // restore previous selection if still valid
+  if(prev && accounts.find(a=>a.id===prev)) sel.value=prev;
+  // hide selector row if no accounts
+  const wrap=document.getElementById('accountSelectorWrap');
+  if(wrap) wrap.style.display=accounts.length===0?'none':'flex';
 }
 
 function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
@@ -1328,6 +1375,7 @@ function openModal(mi,day){
   document.getElementById('modalDate').textContent=`${monthNames[m.index]} ${m.year}`;
   document.getElementById('tradeAmount').value='';
   document.getElementById('tradeNote').value='';
+  updateAccountSelector(); // keep dropdown in sync with current accounts
 
   renderModalTrades();
   document.getElementById('modalOverlay').classList.add('open');
@@ -1359,12 +1407,14 @@ function renderModalTrades(){
   }
 
   d.trades.forEach((t,i)=>{
+    const accName = t.accountId && accounts.find(a=>a.id===t.accountId)?.name || '';
+    const accColor = t.accountId && accounts.find(a=>a.id===t.accountId)?.color || '';
     const el=document.createElement('div');
     el.className='trade-item '+(t.amount>=0?'positive-trade':'negative-trade');
     el.innerHTML=`
       <span class="trade-num">#${i+1}</span>
       <span class="trade-amount-display ${t.amount>=0?'positive':'negative'}">${formatPnl(t.amount,false)}</span>
-      <span class="trade-note-display">${esc(t.note||'')}</span>
+      <span class="trade-note-display">${esc(t.note||'')}${accName?` <span style="color:${accColor||'var(--accent)'};font-size:9px">· ${esc(accName)}</span>`:''}</span>
       <button class="trade-delete" onclick="deleteTrade(${i})" title="Eliminar">✕</button>`;
     list.appendChild(el);
   });
@@ -1386,7 +1436,8 @@ function addTrade(){
   if(isNaN(raw)||raw<=0){ document.getElementById('tradeAmount').focus(); return; }
   const amount=raw*currentSign;
   const note=document.getElementById('tradeNote').value.trim();
-  getDayData(year,month,day).trades.push({amount,note});
+  const accountId=document.getElementById('tradeAccount').value||'';
+  getDayData(year,month,day).trades.push({amount,note,accountId});
   saveData();
   document.getElementById('tradeAmount').value='';
   document.getElementById('tradeNote').value='';
@@ -1395,6 +1446,7 @@ function addTrade(){
   updateDayCell(mi,day);
   updateMonthStats(mi);
   updateYearStats();
+  renderAccounts(); // ← recalculate account balances & progress
 }
 
 function deleteTrade(index){
@@ -1406,6 +1458,7 @@ function deleteTrade(index){
   updateDayCell(mi,day);
   updateMonthStats(mi);
   updateYearStats();
+  renderAccounts(); // ← recalculate account balances & progress
 }
 
 // ── Keyboard shortcuts ──
