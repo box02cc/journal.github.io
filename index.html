@@ -791,7 +791,7 @@
     </div>
 
     <div class="accounts-section">
-      <div class="sidebar-section-title">▸ Mis Cuentas</div>
+      <div class="sidebar-section-title">▸ Mis Cuentas <span style="font-size:8px;color:var(--text-dim);letter-spacing:0.5px;text-transform:none;font-weight:400">· click para filtrar</span></div>
       <div class="accounts-list" id="accountsList">
         <div class="empty-accounts">Sin cuentas.<br>Agregá una abajo.</div>
       </div>
@@ -802,7 +802,7 @@
 
     <div class="sidebar-stats">
       <div class="sidebar-stat-row">
-        <span class="sidebar-stat-label">P&L 2026</span>
+        <span class="sidebar-stat-label" id="yearPnlLabel">P&L 2026</span>
         <span class="sidebar-stat-value positive" id="yearPnl">$0.00</span>
       </div>
       <div class="sidebar-stat-row">
@@ -935,6 +935,7 @@ let currentSign   = 1;
 let activeDay     = null;
 let editAccId     = null; // null = new, otherwise id of account being edited
 let selectedColor = '#7c6fff';
+let activeAccountId = null; // null = todas las cuentas
 
 const ACCOUNT_COLORS = [
   '#7c6fff','#00e676','#ff4444','#ffd740','#00bcd4',
@@ -952,8 +953,8 @@ function saveAccounts() { try { localStorage.setItem(ACCOUNTS_KEY,  JSON.stringi
 
 function getDayKey(y, m, d)    { return `${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`; }
 function getDayData(y, m, d)   { const k=getDayKey(y,m,d); if(!data[k]) data[k]={trades:[]}; return data[k]; }
-function getDayTotal(y, m, d)  { return getDayData(y,m,d).trades.reduce((s,t)=>s+t.amount,0); }
-function getDayTradeCount(y,m,d){ return getDayData(y,m,d).trades.length; }
+function getDayTotal(y, m, d)  { return getDayData(y,m,d).trades.filter(t=>!activeAccountId||t.accountId===activeAccountId).reduce((s,t)=>s+t.amount,0); }
+function getDayTradeCount(y,m,d){ return getDayData(y,m,d).trades.filter(t=>!activeAccountId||t.accountId===activeAccountId).length; }
 
 // ══════════════════════════════════════════════
 //  MONTHS
@@ -1153,6 +1154,15 @@ function updateYearStats(){
     }
   });
   const pEl=document.getElementById('yearPnl');
+  const lEl2=document.getElementById('yearPnlLabel');
+  if(lEl2){
+    if(activeAccountId){
+      const acc=accounts.find(a=>a.id===activeAccountId);
+      lEl2.textContent = acc ? acc.name : 'P&L 2026';
+    } else {
+      lEl2.textContent = 'P&L 2026';
+    }
+  }
   pEl.textContent=formatPnl(total,true);
   pEl.className='sidebar-stat-value '+pnlClass(total);
   document.getElementById('yearTrades').textContent=trades;
@@ -1171,6 +1181,29 @@ function refreshAll(){
 // ══════════════════════════════════════════════
 //  ACCOUNTS
 // ══════════════════════════════════════════════
+
+// ── Select active account for calendar filtering ──
+function selectAccount(id){
+  activeAccountId = (activeAccountId === id) ? null : id;
+  renderAccounts();
+  refreshAll();
+  updateActiveBadge();
+}
+
+function updateActiveBadge(){
+  const dot  = document.getElementById('activeAccountDot');
+  const name = document.getElementById('activeAccountName');
+  if(activeAccountId){
+    const acc = accounts.find(a=>a.id===activeAccountId);
+    if(acc){
+      dot.style.background  = acc.color || '#7c6fff';
+      name.textContent = acc.name;
+      return;
+    }
+  }
+  dot.style.background = '#7c6fff';
+  name.textContent = 'Todas las cuentas';
+}
 
 // Compute total P&L for an account by summing all trades tagged with its id
 function computeAccountPnl(accId){
@@ -1209,7 +1242,8 @@ function renderAccounts(){
     }
 
     const card=document.createElement('div');
-    card.className='account-card';
+    card.className='account-card'+(activeAccountId===acc.id?' active':'');
+    card.onclick=(e)=>{ if(!e.target.closest('.account-action-btn')) selectAccount(acc.id); };
     card.innerHTML=`
       <div class="account-card-top">
         <div class="account-name-row">
@@ -1391,8 +1425,9 @@ function renderModalTrades(){
   if(!activeDay) return;
   const {mi,day,year,month}=activeDay;
   const d=getDayData(year,month,day);
-  const total=d.trades.reduce((s,t)=>s+t.amount,0);
-  const count=d.trades.length;
+  const visibleTrades = d.trades.map((t,i)=>({...t,_origIndex:i})).filter(t=>!activeAccountId||t.accountId===activeAccountId);
+  const total=visibleTrades.reduce((s,t)=>s+t.amount,0);
+  const count=visibleTrades.length;
 
   document.getElementById('modalTotalValue').textContent=formatPnl(total,false);
   document.getElementById('modalTotalValue').className='modal-total-value '+pnlClass(total);
@@ -1406,7 +1441,7 @@ function renderModalTrades(){
     return;
   }
 
-  d.trades.forEach((t,i)=>{
+  visibleTrades.forEach((t,i)=>{
     const accName = t.accountId && accounts.find(a=>a.id===t.accountId)?.name || '';
     const accColor = t.accountId && accounts.find(a=>a.id===t.accountId)?.color || '';
     const el=document.createElement('div');
@@ -1415,7 +1450,7 @@ function renderModalTrades(){
       <span class="trade-num">#${i+1}</span>
       <span class="trade-amount-display ${t.amount>=0?'positive':'negative'}">${formatPnl(t.amount,false)}</span>
       <span class="trade-note-display">${esc(t.note||'')}${accName?` <span style="color:${accColor||'var(--accent)'};font-size:9px">· ${esc(accName)}</span>`:''}</span>
-      <button class="trade-delete" onclick="deleteTrade(${i})" title="Eliminar">✕</button>`;
+      <button class="trade-delete" onclick="deleteTrade('${t._origIndex}')" title="Eliminar">✕</button>`;
     list.appendChild(el);
   });
 }
@@ -1487,6 +1522,7 @@ loadData();
 buildCalendar();
 refreshAll();
 renderAccounts();
+updateActiveBadge();
 </script>
 </body>
 </html>
