@@ -3,8 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Trading Journal Cloud 2026</title>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<title>Trading Journal 2026</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;600;700;800&display=swap');
 
@@ -53,6 +52,7 @@
     opacity: 0.5;
   }
 
+  /* ── LAYOUT ── */
   .layout {
     display: flex;
     min-height: 100vh;
@@ -74,98 +74,318 @@
     overflow-y: auto;
   }
 
+  .sidebar::-webkit-scrollbar { width: 4px; }
+  .sidebar::-webkit-scrollbar-track { background: transparent; }
+  .sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
   .sidebar-logo {
     padding: 20px 18px 16px;
     border-bottom: 1px solid var(--border);
   }
 
-  .logo { display: flex; align-items: center; gap: 10px; }
-  .logo-icon {
-    width: 36px; height: 36px;
-    background: linear-gradient(135deg, var(--accent), #b06fff);
-    border-radius: 9px; display: flex; align-items: center; justify-content: center;
-    font-size: 16px; flex-shrink: 0;
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
   }
+
+  .logo-icon {
+    width: 36px;
+    height: 36px;
+    background: linear-gradient(135deg, var(--accent), #b06fff);
+    border-radius: 9px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+
   .logo-text { font-size: 16px; font-weight: 800; letter-spacing: -0.5px; }
   .logo-sub { font-size: 9px; color: var(--text-muted); font-family: 'Space Mono', monospace; letter-spacing: 1px; }
 
-  /* PIN CONFIG IN SIDEBAR */
-  .user-pin-box {
-    padding: 12px 18px;
-    border-bottom: 1px solid var(--border);
-    background: #12121c;
-  }
-
+  /* ACCOUNTS SECTION */
   .accounts-section { flex: 1; padding: 16px 0 0; }
+
   .sidebar-section-title {
-    font-size: 9px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
-    color: var(--text-muted); font-family: 'Space Mono', monospace; padding: 0 18px 10px;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    font-family: 'Space Mono', monospace;
+    padding: 0 18px 10px;
   }
 
-  .accounts-list { display: flex; flex-direction: column; gap: 4px; padding: 0 10px; margin-bottom: 12px; }
-  .account-card {
-    background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius);
-    padding: 11px 13px; cursor: pointer; transition: all 0.15s; position: relative;
+  .accounts-list {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 0 10px;
+    margin-bottom: 12px;
   }
+
+  .account-card {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 11px 13px;
+    cursor: pointer;
+    transition: all 0.15s;
+    position: relative;
+  }
+
   .account-card:hover { border-color: var(--border-bright); }
   .account-card.active { border-color: var(--accent); background: var(--accent-dim); }
-  .account-card-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; }
-  .account-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; margin-right: 7px; }
-  .account-name-row { display: flex; align-items: center; flex: 1; min-width: 0; }
-  .account-name { font-size: 12px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  
-  .account-actions { display: flex; gap: 3px; opacity: 0; transition: opacity 0.15s; flex-shrink: 0; margin-left: 4px; }
-  .account-card:hover .account-actions { opacity: 1; }
-  .account-action-btn {
-    width: 20px; height: 20px; border-radius: 4px; border: none; background: var(--surface3);
-    color: var(--text-muted); cursor: pointer; font-size: 10px; display: flex; align-items: center; justify-content: center;
+
+  .account-card-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 4px;
   }
+
+  .account-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-right: 7px;
+  }
+
+  .account-name-row {
+    display: flex;
+    align-items: center;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .account-name {
+    font-size: 12px;
+    font-weight: 700;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .account-actions {
+    display: flex;
+    gap: 3px;
+    opacity: 0;
+    transition: opacity 0.15s;
+    flex-shrink: 0;
+    margin-left: 4px;
+  }
+
+  .account-card:hover .account-actions { opacity: 1; }
+
+  .account-action-btn {
+    width: 20px;
+    height: 20px;
+    border-radius: 4px;
+    border: none;
+    background: var(--surface3);
+    color: var(--text-muted);
+    cursor: pointer;
+    font-size: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.12s;
+  }
+
   .account-action-btn:hover { background: var(--accent-dim); color: var(--accent); }
   .account-action-btn.del:hover { background: var(--red-dim); color: var(--red); }
 
-  .account-broker { font-size: 9px; color: var(--text-muted); font-family: 'Space Mono', monospace; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .account-balance-row { display: flex; justify-content: space-between; align-items: flex-end; margin-top: 8px; }
-  .account-balance-label { font-size: 9px; color: var(--text-dim); font-family: 'Space Mono', monospace; }
-  .account-balance { font-size: 13px; font-weight: 700; font-family: 'Space Mono', monospace; }
-  .account-pnl-row { display: flex; justify-content: space-between; margin-top: 3px; }
-  .account-pnl-label { font-size: 9px; color: var(--text-dim); font-family: 'Space Mono', monospace; }
-  .account-pnl { font-size: 11px; font-family: 'Space Mono', monospace; font-weight: 700; }
+  .account-broker {
+    font-size: 9px;
+    color: var(--text-muted);
+    font-family: 'Space Mono', monospace;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .account-balance-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-top: 8px;
+  }
+
+  .account-balance-label {
+    font-size: 9px;
+    color: var(--text-dim);
+    font-family: 'Space Mono', monospace;
+    letter-spacing: 0.5px;
+  }
+
+  .account-balance {
+    font-size: 13px;
+    font-weight: 700;
+    font-family: 'Space Mono', monospace;
+  }
+
+  .account-pnl-row {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 3px;
+  }
+
+  .account-pnl-label {
+    font-size: 9px;
+    color: var(--text-dim);
+    font-family: 'Space Mono', monospace;
+  }
+
+  .account-pnl {
+    font-size: 11px;
+    font-family: 'Space Mono', monospace;
+    font-weight: 700;
+  }
+
   .account-pnl.positive { color: var(--green); }
   .account-pnl.negative { color: var(--red); }
   .account-pnl.zero { color: var(--text-dim); }
-  .account-progress-bar { height: 3px; background: var(--surface3); border-radius: 2px; margin-top: 8px; overflow: hidden; }
-  .account-progress-fill { height: 100%; border-radius: 2px; transition: width 0.4s ease; }
 
-  .add-account-btn {
-    margin: 0 10px 16px; padding: 10px; border: 1px dashed var(--border); border-radius: var(--radius);
-    background: transparent; color: var(--text-muted); cursor: pointer; font-family: 'Syne', sans-serif;
-    font-size: 12px; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 6px; width: calc(100% - 20px);
+  .account-progress-bar {
+    height: 3px;
+    background: var(--surface3);
+    border-radius: 2px;
+    margin-top: 8px;
+    overflow: hidden;
   }
-  .add-account-btn:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-dim); }
 
-  .sidebar-stats { border-top: 1px solid var(--border); padding: 14px 18px; display: flex; flex-direction: column; gap: 8px; }
-  .sidebar-stat-row { display: flex; justify-content: space-between; align-items: center; }
-  .sidebar-stat-label { font-size: 9px; color: var(--text-muted); font-family: 'Space Mono', monospace; letter-spacing: 1px; text-transform: uppercase; }
-  .sidebar-stat-value { font-size: 12px; font-weight: 700; font-family: 'Space Mono', monospace; }
+  .account-progress-fill {
+    height: 100%;
+    border-radius: 2px;
+    transition: width 0.4s ease;
+  }
+
+  /* ADD ACCOUNT BTN */
+  .add-account-btn {
+    margin: 0 10px 16px;
+    padding: 10px;
+    border: 1px dashed var(--border);
+    border-radius: var(--radius);
+    background: transparent;
+    color: var(--text-muted);
+    cursor: pointer;
+    font-family: 'Syne', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    transition: all 0.15s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    width: calc(100% - 20px);
+  }
+
+  .add-account-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: var(--accent-dim);
+  }
+
+  /* SIDEBAR FOOTER - YEAR STATS */
+  .sidebar-stats {
+    border-top: 1px solid var(--border);
+    padding: 14px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .sidebar-stat-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .sidebar-stat-label {
+    font-size: 9px;
+    color: var(--text-muted);
+    font-family: 'Space Mono', monospace;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  .sidebar-stat-value {
+    font-size: 12px;
+    font-weight: 700;
+    font-family: 'Space Mono', monospace;
+  }
+
   .sidebar-stat-value.positive { color: var(--green); }
   .sidebar-stat-value.negative { color: var(--red); }
   .sidebar-stat-value.neutral { color: var(--accent); }
 
   /* ── MAIN CONTENT ── */
-  .main { flex: 1; min-width: 0; padding: 24px 24px 40px; overflow-x: auto; }
-  .main-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 28px; padding-bottom: 20px; border-bottom: 1px solid var(--border); }
-  .active-account-badge { display: flex; align-items: center; gap: 8px; background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 6px 14px; }
-  .active-account-dot { width: 8px; height: 8px; border-radius: 50%; }
-  .active-account-name { font-size: 12px; font-weight: 700; color: var(--text-muted); }
-
-  .month-tabs { display: flex; gap: 8px; margin-bottom: 28px; flex-wrap: wrap; }
-  .month-tab {
-    padding: 7px 16px; border-radius: 20px; border: 1px solid var(--border); background: var(--surface);
-    color: var(--text-muted); cursor: pointer; font-family: 'Syne', sans-serif; font-weight: 600; font-size: 13px;
+  .main {
+    flex: 1;
+    min-width: 0;
+    padding: 24px 24px 40px;
+    overflow-x: auto;
   }
+
+  /* HEADER */
+  .main-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 28px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .active-account-badge {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 6px 14px;
+  }
+
+  .active-account-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+  }
+
+  .active-account-name {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-muted);
+  }
+
+  /* MONTH TABS */
+  .month-tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 28px;
+    flex-wrap: wrap;
+  }
+
+  .month-tab {
+    padding: 7px 16px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text-muted);
+    cursor: pointer;
+    font-family: 'Syne', sans-serif;
+    font-weight: 600;
+    font-size: 13px;
+    transition: all 0.2s;
+  }
+
   .month-tab:hover { border-color: var(--accent); color: var(--text); }
   .month-tab.active { background: var(--accent); border-color: var(--accent); color: #fff; }
 
+  /* MONTH VIEW */
   .month-view { display: none; animation: fadeIn 0.3s ease; }
   .month-view.active { display: block; }
 
@@ -174,25 +394,69 @@
     to { opacity: 1; transform: translateY(0); }
   }
 
-  .month-header { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 18px; }
+  .month-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 18px;
+  }
+
   .month-title { font-size: 32px; font-weight: 800; letter-spacing: -1px; }
+
   .month-summary { display: flex; gap: 16px; align-items: center; }
+
   .summary-item { text-align: right; }
-  .summary-item-label { font-size: 9px; color: var(--text-muted); letter-spacing: 1px; text-transform: uppercase; font-family: 'Space Mono', monospace; }
-  .summary-item-value { font-family: 'Space Mono', monospace; font-size: 15px; font-weight: 700; }
+
+  .summary-item-label {
+    font-size: 9px;
+    color: var(--text-muted);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-family: 'Space Mono', monospace;
+  }
+
+  .summary-item-value {
+    font-family: 'Space Mono', monospace;
+    font-size: 15px;
+    font-weight: 700;
+  }
+
   .summary-item-value.positive { color: var(--green); }
   .summary-item-value.negative { color: var(--red); }
   .summary-item-value.zero { color: var(--text-dim); }
 
   /* CALENDAR */
-  .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr) 110px; gap: 5px; }
-  .cal-header { text-align: center; padding: 7px 4px; font-size: 9px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-muted); font-family: 'Space Mono', monospace; }
+  .calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr) 110px;
+    gap: 5px;
+  }
+
+  .cal-header {
+    text-align: center;
+    padding: 7px 4px;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    font-family: 'Space Mono', monospace;
+  }
+
   .cal-header.week-header { color: var(--accent); }
 
   .day-cell {
-    background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
-    min-height: 100px; padding: 9px; cursor: pointer; transition: all 0.15s; position: relative; overflow: hidden;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    min-height: 100px;
+    padding: 9px;
+    cursor: pointer;
+    transition: all 0.15s;
+    position: relative;
+    overflow: hidden;
   }
+
   .day-cell:hover { border-color: var(--border-bright); background: var(--surface2); transform: translateY(-1px); }
   .day-cell.empty { background: transparent; border-color: transparent; cursor: default; pointer-events: none; }
   .day-cell.weekend { opacity: 0.6; }
@@ -201,19 +465,46 @@
   .day-cell.today { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent-dim); }
 
   .day-number { font-size: 10px; font-weight: 700; color: var(--text-muted); font-family: 'Space Mono', monospace; margin-bottom: 5px; }
+  .day-cell.today .day-number { color: var(--accent); }
+
   .day-pnl { font-size: 13px; font-weight: 700; font-family: 'Space Mono', monospace; line-height: 1.2; }
   .day-pnl.positive { color: var(--green); }
   .day-pnl.negative { color: var(--red); }
   .day-pnl.zero { color: var(--text-dim); }
+
   .day-trades { font-size: 9px; color: var(--text-muted); margin-top: 3px; font-family: 'Space Mono', monospace; }
+
   .day-add-btn {
-    position: absolute; bottom: 6px; right: 6px; width: 18px; height: 18px; border-radius: 50%;
-    background: var(--surface3); border: 1px solid var(--border); color: var(--text-muted);
-    font-size: 12px; display: flex; align-items: center; justify-content: center; cursor: pointer;
+    position: absolute;
+    bottom: 6px;
+    right: 6px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--surface3);
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.15s;
+    line-height: 1;
   }
+
   .day-cell:hover .day-add-btn { background: var(--accent); border-color: var(--accent); color: white; }
 
-  .week-cell { background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius); padding: 10px; display: flex; flex-direction: column; justify-content: center; }
+  .week-cell {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
   .week-label { font-size: 9px; color: var(--accent); font-weight: 700; letter-spacing: 1px; font-family: 'Space Mono', monospace; text-transform: uppercase; margin-bottom: 5px; }
   .week-pnl { font-size: 13px; font-weight: 700; font-family: 'Space Mono', monospace; }
   .week-pnl.positive { color: var(--green); }
@@ -226,22 +517,77 @@
   .badge-green { background: var(--green-mid); color: var(--green); }
   .badge-red { background: var(--red-mid); color: var(--red); }
 
-  /* MODALS */
-  .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.75); backdrop-filter: blur(4px); z-index: 100; display: none; align-items: center; justify-content: center; padding: 20px; }
+  /* ── MODALS ── */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.75);
+    backdrop-filter: blur(4px);
+    z-index: 100;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+
   .modal-overlay.open { display: flex; }
-  .modal { background: var(--surface); border: 1px solid var(--border-bright); border-radius: 16px; width: 100%; max-width: 480px; max-height: 88vh; overflow-y: auto; box-shadow: 0 24px 80px rgba(0,0,0,0.6); animation: modalIn 0.25s cubic-bezier(0.34, 1.56, 0.64, 1); }
+
+  .modal {
+    background: var(--surface);
+    border: 1px solid var(--border-bright);
+    border-radius: 16px;
+    width: 100%;
+    max-width: 480px;
+    max-height: 88vh;
+    overflow-y: auto;
+    box-shadow: 0 24px 80px rgba(0,0,0,0.6);
+    animation: modalIn 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
   .modal.modal-sm { max-width: 400px; }
 
-  @keyframes modalIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+  @keyframes modalIn {
+    from { transform: scale(0.9); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+  }
 
-  .modal-header { padding: 18px 22px 14px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+  .modal-header {
+    padding: 18px 22px 14px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
   .modal-title { font-size: 17px; font-weight: 800; }
   .modal-date { font-size: 11px; color: var(--text-muted); font-family: 'Space Mono', monospace; margin-top: 2px; }
-  .modal-close { width: 30px; height: 30px; border-radius: 50%; background: var(--surface3); border: 1px solid var(--border); color: var(--text-muted); cursor: pointer; display: flex; align-items: center; justify-content: center; }
+
+  .modal-close {
+    width: 30px; height: 30px;
+    border-radius: 50%;
+    background: var(--surface3);
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    cursor: pointer;
+    font-size: 14px;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.15s;
+    flex-shrink: 0;
+  }
+
   .modal-close:hover { background: var(--red-mid); color: var(--red); border-color: var(--red); }
+
   .modal-body { padding: 18px 22px; }
 
-  .modal-total { background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px; margin-bottom: 18px; text-align: center; }
+  .modal-total {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 14px;
+    margin-bottom: 18px;
+    text-align: center;
+  }
+
   .modal-total-label { font-size: 9px; color: var(--text-muted); letter-spacing: 1.5px; text-transform: uppercase; font-family: 'Space Mono', monospace; }
   .modal-total-value { font-size: 26px; font-weight: 800; font-family: 'Space Mono', monospace; margin-top: 4px; }
   .modal-total-value.positive { color: var(--green); }
@@ -249,80 +595,405 @@
   .modal-total-value.zero { color: var(--text-dim); }
   .modal-total-trades { font-size: 10px; color: var(--text-muted); margin-top: 3px; font-family: 'Space Mono', monospace; }
 
-  .trades-list { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; max-height: 240px; overflow-y: auto; }
-  .trade-item { display: flex; align-items: center; gap: 8px; background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 9px 11px; }
+  .trades-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 14px;
+    max-height: 240px;
+    overflow-y: auto;
+  }
+
+  .trades-list::-webkit-scrollbar { width: 3px; }
+  .trades-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+  .trade-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 9px 11px;
+    transition: all 0.12s;
+  }
+
   .trade-item.positive-trade { border-color: #00e67630; }
   .trade-item.negative-trade { border-color: #ff444430; }
+
   .trade-num { font-size: 9px; color: var(--text-dim); font-family: 'Space Mono', monospace; min-width: 18px; }
   .trade-amount-display { flex: 1; font-family: 'Space Mono', monospace; font-weight: 700; font-size: 13px; }
   .trade-amount-display.positive { color: var(--green); }
   .trade-amount-display.negative { color: var(--red); }
   .trade-note-display { font-size: 11px; color: var(--text-muted); flex: 1.5; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .trade-delete { background: none; border: none; color: var(--text-dim); cursor: pointer; font-size: 12px; padding: 2px 4px; border-radius: 4px; }
+
+  .trade-delete {
+    background: none; border: none; color: var(--text-dim);
+    cursor: pointer; font-size: 12px; padding: 2px 4px;
+    border-radius: 4px; transition: all 0.12s;
+  }
   .trade-delete:hover { color: var(--red); background: var(--red-dim); }
 
-  .add-trade-form { background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius); padding: 13px; }
-  .form-label { font-size: 9px; letter-spacing: 1.2px; text-transform: uppercase; color: var(--text-muted); font-family: 'Space Mono', monospace; margin-bottom: 6px; display: block; }
+  .add-trade-form {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 13px;
+  }
+
+  .form-label {
+    font-size: 9px;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    font-family: 'Space Mono', monospace;
+    margin-bottom: 6px;
+    display: block;
+  }
+
   .form-row { display: flex; gap: 8px; margin-bottom: 8px; }
   .form-group { flex: 1; display: flex; flex-direction: column; }
 
   input[type="number"], input[type="text"], select {
-    background: var(--surface3); border: 1px solid var(--border); border-radius: var(--radius-sm);
-    padding: 9px 11px; color: var(--text); font-family: 'Space Mono', monospace; font-size: 13px; outline: none; width: 100%;
+    background: var(--surface3);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 9px 11px;
+    color: var(--text);
+    font-family: 'Space Mono', monospace;
+    font-size: 13px;
+    outline: none;
+    transition: border-color 0.15s;
+    width: 100%;
   }
-  input:focus, select:focus { border-color: var(--accent); }
 
-  .btn { padding: 9px 18px; border-radius: var(--radius-sm); border: none; font-family: 'Syne', sans-serif; font-weight: 700; font-size: 13px; cursor: pointer; width: 100%; }
-  .btn-primary { background: var(--accent); color: white; }
+  select option { background: var(--surface3); }
+  input:focus, select:focus { border-color: var(--accent); }
+  input::placeholder { color: var(--text-dim); }
+
+  .btn {
+    padding: 9px 18px;
+    border-radius: var(--radius-sm);
+    border: none;
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .btn-primary { background: var(--accent); color: white; width: 100%; }
   .btn-primary:hover { background: #9580ff; transform: translateY(-1px); }
+
   .btn-danger { background: var(--red-mid); color: var(--red); border: 1px solid var(--red); }
   .btn-danger:hover { background: var(--red); color: white; }
-  .btn-cancel { background: var(--surface3); color: var(--text-muted); border: 1px solid var(--border); }
 
   .section-sep { border: none; border-top: 1px solid var(--border); margin: 14px 0; }
+
   .sign-toggle { display: flex; gap: 4px; margin-bottom: 8px; }
-  .sign-btn { flex: 1; padding: 8px; border-radius: var(--radius-sm); border: 1px solid var(--border); background: var(--surface3); cursor: pointer; font-family: 'Space Mono', monospace; font-size: 12px; font-weight: 700; color: var(--text-muted); }
+
+  .sign-btn {
+    flex: 1; padding: 8px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+    background: var(--surface3);
+    cursor: pointer;
+    font-family: 'Space Mono', monospace;
+    font-size: 12px; font-weight: 700;
+    transition: all 0.15s; color: var(--text-muted);
+  }
+
   .sign-btn.active-win { background: var(--green-mid); border-color: var(--green); color: var(--green); }
   .sign-btn.active-loss { background: var(--red-mid); border-color: var(--red); color: var(--red); }
 
   .quick-btns { display: flex; gap: 5px; margin-bottom: 8px; flex-wrap: wrap; }
-  .quick-btn { padding: 4px 9px; border-radius: 4px; border: 1px solid var(--border); background: var(--surface3); color: var(--text-muted); cursor: pointer; font-family: 'Space Mono', monospace; font-size: 10px; }
+
+  .quick-btn {
+    padding: 4px 9px;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+    background: var(--surface3);
+    color: var(--text-muted);
+    cursor: pointer;
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    transition: all 0.12s;
+  }
+
   .quick-btn:hover { border-color: var(--accent); color: var(--text); }
 
-  .color-picker-row { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 8px; }
-  .color-dot { width: 22px; height: 22px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; transition: all 0.12s; flex-shrink: 0; }
+  /* COLOR PICKER */
+  .color-picker-row {
+    display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 8px;
+  }
+
+  .color-dot {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: all 0.12s;
+    flex-shrink: 0;
+  }
+
   .color-dot.selected { border-color: white; transform: scale(1.15); }
 
-  .confirm-box { background: var(--red-dim); border: 1px solid var(--red); border-radius: var(--radius); padding: 14px; text-align: center; margin-top: 12px; }
+  /* CONFIRM DELETE */
+  .confirm-box {
+    background: var(--red-dim);
+    border: 1px solid var(--red);
+    border-radius: var(--radius);
+    padding: 14px;
+    text-align: center;
+    margin-top: 12px;
+  }
+
   .confirm-box p { font-size: 13px; color: var(--text); margin-bottom: 12px; }
   .confirm-btns { display: flex; gap: 8px; }
+  .confirm-btns .btn { flex: 1; }
 
-  .empty-accounts { padding: 16px 18px; text-align: center; color: var(--text-dim); font-size: 11px; font-family: 'Space Mono', monospace; line-height: 1.6; }
+  .btn-cancel {
+    background: var(--surface3);
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+  }
+  .btn-cancel:hover { background: var(--surface2); color: var(--text); }
+
+  /* EMPTY STATE */
+  .empty-accounts {
+    padding: 16px 18px;
+    text-align: center;
+    color: var(--text-dim);
+    font-size: 11px;
+    font-family: 'Space Mono', monospace;
+    line-height: 1.6;
+  }
+
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--border-bright); }
+
+  /* ── LOADING ── */
+  .loading-overlay {
+    position: fixed; inset: 0; background: var(--bg);
+    z-index: 190; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 16px;
+  }
+  .loading-overlay.hidden { display: none; }
+  .loading-spinner {
+    width: 36px; height: 36px;
+    border: 3px solid var(--border);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .loading-text { font-size: 11px; color: var(--text-muted); font-family: "Space Mono",monospace; letter-spacing: 1px; }
+
+  /* ── CONFIG / LOGIN SCREENS ── */
+  .login-screen, .config-screen {
+    position: fixed; inset: 0; background: var(--bg);
+    z-index: 200; display: flex; align-items: center; justify-content: center; padding: 20px;
+  }
+  .login-screen.hidden, .config-screen.hidden { display: none; }
+
+  .login-box, .config-box {
+    background: var(--surface); border: 1px solid var(--border-bright);
+    border-radius: 20px; padding: 40px 36px;
+    width: 100%; max-width: 380px;
+    box-shadow: 0 32px 80px rgba(0,0,0,0.7);
+    animation: modalIn 0.3s cubic-bezier(0.34,1.56,0.64,1);
+  }
+  .config-box { max-width: 460px; }
+
+  .login-logo { display: flex; align-items: center; gap: 12px; margin-bottom: 32px; }
+  .login-logo-icon {
+    width: 44px; height: 44px;
+    background: linear-gradient(135deg, var(--accent), #b06fff);
+    border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px;
+  }
+  .login-title { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; }
+  .login-sub { font-size: 10px; color: var(--text-muted); font-family: "Space Mono",monospace; letter-spacing: 1px; margin-top: 2px; }
+
+  .login-label { font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-muted); font-family: "Space Mono",monospace; margin-bottom: 8px; display: block; }
+  .login-input-wrap { position: relative; margin-bottom: 12px; }
+  .login-input {
+    width: 100%; background: var(--surface2); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 13px 16px; color: var(--text);
+    font-family: "Space Mono",monospace; font-size: 15px; outline: none;
+    transition: border-color 0.15s; letter-spacing: 3px;
+  }
+  .login-input:focus { border-color: var(--accent); }
+  .login-input::placeholder { letter-spacing: 1px; color: var(--text-dim); }
+
+  .login-btn {
+    width: 100%; padding: 13px; background: var(--accent);
+    border: none; border-radius: var(--radius); color: white;
+    font-family: "Syne",sans-serif; font-weight: 800; font-size: 14px;
+    letter-spacing: 1px; cursor: pointer; transition: all 0.15s; margin-top: 8px;
+  }
+  .login-btn:hover { background: #9580ff; transform: translateY(-1px); }
+  .login-btn:disabled { opacity: 0.5; cursor: default; transform: none; }
+
+  .login-error {
+    margin-top: 10px; padding: 10px 14px;
+    background: var(--red-dim); border: 1px solid var(--red);
+    border-radius: var(--radius-sm); color: var(--red);
+    font-size: 12px; font-family: "Space Mono",monospace; display: none;
+  }
+  .login-error.show { display: block; }
+
+  .login-hint { margin-top: 18px; text-align: center; font-size: 10px; color: var(--text-dim); font-family: "Space Mono",monospace; line-height: 1.6; }
+
+  .config-note {
+    background: var(--accent-dim); border: 1px solid var(--accent);
+    border-radius: var(--radius-sm); padding: 12px 14px;
+    font-size: 11px; font-family: "Space Mono",monospace;
+    color: var(--text-muted); line-height: 1.7; margin-bottom: 20px;
+  }
+  .config-note strong { color: var(--accent); }
+  .config-field { margin-bottom: 14px; }
+  .config-label { font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-muted); font-family: "Space Mono",monospace; margin-bottom: 7px; display: block; }
+  .config-input {
+    width: 100%; background: var(--surface2); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 11px 14px; color: var(--text);
+    font-family: "Space Mono",monospace; font-size: 11px; outline: none; transition: border-color 0.15s;
+  }
+  .config-input:focus { border-color: var(--accent); }
+
+  /* ── TOAST ── */
+  .toast {
+    position: fixed; bottom: 24px; right: 24px;
+    background: var(--surface2); border: 1px solid var(--border-bright);
+    border-radius: var(--radius); padding: 12px 18px;
+    font-size: 12px; font-family: "Space Mono",monospace;
+    color: var(--text); z-index: 300;
+    transform: translateY(80px); opacity: 0;
+    transition: all 0.3s cubic-bezier(0.34,1.56,0.64,1);
+    pointer-events: none;
+  }
+  .toast.show  { transform: translateY(0); opacity: 1; }
+  .toast.success { border-color: var(--green); color: var(--green); }
+  .toast.error   { border-color: var(--red);   color: var(--red); }
+
+  /* ── USER BADGE ── */
+  .user-badge {
+    margin: 12px 10px 0; padding: 9px 12px;
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: var(--radius); display: flex;
+    align-items: center; justify-content: space-between; gap: 8px;
+  }
+  .user-badge-left { display: flex; align-items: center; gap: 8px; min-width: 0; }
+  .user-avatar {
+    width: 28px; height: 28px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 800; flex-shrink: 0;
+    font-family: "Space Mono",monospace;
+  }
+  .user-info { min-width: 0; }
+  .user-name { font-size: 12px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .user-role { font-size: 9px; color: var(--text-muted); font-family: "Space Mono",monospace; }
+  .user-logout-btn {
+    background: none; border: none; color: var(--text-dim);
+    cursor: pointer; font-size: 13px; padding: 3px;
+    border-radius: 4px; transition: all 0.12s; flex-shrink: 0;
+  }
+  .user-logout-btn:hover { color: var(--red); background: var(--red-dim); }
+
 </style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
+<!-- LOADING -->
+<div class="loading-overlay" id="loadingOverlay">
+  <div class="loading-spinner"></div>
+  <div class="loading-text">CONECTANDO...</div>
+</div>
+
+<!-- CONFIG SCREEN -->
+<div class="config-screen hidden" id="configScreen">
+  <div class="config-box">
+    <div class="login-logo" style="margin-bottom:24px">
+      <div class="login-logo-icon">📈</div>
+      <div><div class="login-title">JOURNAL</div><div class="login-sub">CONFIGURACION INICIAL</div></div>
+    </div>
+    <div class="config-note">
+      <strong>Pasos para obtener credenciales:</strong><br>
+      1. Creá un proyecto en <strong>supabase.com</strong><br>
+      2. Ir a <strong>Settings → API</strong><br>
+      3. Copiá la <strong>Project URL</strong> y la <strong>anon public key</strong>
+    </div>
+    <div class="config-field">
+      <label class="config-label">Project URL</label>
+      <input type="text" class="config-input" id="cfgUrl" placeholder="https://xxxxxxxxxxxx.supabase.co">
+    </div>
+    <div class="config-field">
+      <label class="config-label">Anon Key</label>
+      <input type="text" class="config-input" id="cfgKey" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...">
+    </div>
+    <button class="login-btn" onclick="saveConfig()">GUARDAR Y CONECTAR</button>
+    <div class="login-error" id="cfgError"></div>
+  </div>
+</div>
+
+<!-- LOGIN SCREEN -->
+<div class="login-screen hidden" id="loginScreen">
+  <div class="login-box">
+    <div class="login-logo">
+      <div class="login-logo-icon">📈</div>
+      <div><div class="login-title">JOURNAL</div><div class="login-sub">TRADING LOG 2026</div></div>
+    </div>
+    <label class="login-label">Tu nombre de usuario</label>
+    <div class="login-input-wrap">
+      <input type="text" class="login-input" id="loginUsername" placeholder="ej: alex" autocomplete="off" maxlength="20">
+    </div>
+    <label class="login-label">PIN de acceso</label>
+    <div class="login-input-wrap">
+      <input type="password" class="login-input" id="loginPin" placeholder="&bull; &bull; &bull; &bull; &bull; &bull;" maxlength="20" inputmode="numeric">
+    </div>
+    <button class="login-btn" id="loginBtn" onclick="doLogin()">INGRESAR</button>
+    <div class="login-error" id="loginError"></div>
+    <div class="login-hint">
+      Si es tu primera vez,<br>se creara tu usuario automaticamente.<br><br>
+      <span style="color:var(--text-dim)">Olvidaste tu PIN? Pedi que lo reseteen en Supabase.</span>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
 <div class="layout">
 
+  <!-- ══ SIDEBAR ══ -->
   <aside class="sidebar">
     <div class="sidebar-logo">
       <div class="logo">
         <div class="logo-icon">📈</div>
         <div>
           <div class="logo-text">JOURNAL</div>
-          <div class="logo-sub">CLOUD LOG 2026</div>
+          <div class="logo-sub">TRADING LOG 2026</div>
         </div>
       </div>
     </div>
 
-    <div class="user-pin-box">
-      <label class="form-label" style="margin-bottom:4px">🔑 Mi PIN de Acceso</label>
-      <input type="text" id="userPinInput" placeholder="Ej: 1234" max="8" onchange="savePin(this.value)" style="padding: 6px 10px; font-size: 12px;">
+    <!-- user badge -->
+    <div class="user-badge" id="userBadge">
+      <div class="user-badge-left">
+        <div class="user-avatar" id="userAvatar" style="background:#7c6fff20;color:#7c6fff">?</div>
+        <div class="user-info">
+          <div class="user-name" id="userDisplayName">—</div>
+          <div class="user-role">trader</div>
+        </div>
+      </div>
+      <button class="user-logout-btn" onclick="doLogout()" title="Cerrar sesion">&#x23FB;</button>
     </div>
 
     <div class="accounts-section">
       <div class="sidebar-section-title">▸ Mis Cuentas <span style="font-size:8px;color:var(--text-dim);letter-spacing:0.5px;text-transform:none;font-weight:400">· click para filtrar</span></div>
       <div class="accounts-list" id="accountsList">
-        <div class="empty-accounts">Cargando cuentas de la nube...</div>
+        <div class="empty-accounts">Sin cuentas.<br>Agregá una abajo.</div>
       </div>
       <button class="add-account-btn" onclick="openAccountModal()">
         <span>＋</span> Nueva cuenta
@@ -345,6 +1016,7 @@
     </div>
   </aside>
 
+  <!-- ══ MAIN ══ -->
   <main class="main">
     <div class="main-header">
       <div id="activeAccountBadge" class="active-account-badge">
@@ -358,6 +1030,7 @@
   </main>
 </div>
 
+<!-- ══ MODAL: TRADES DEL DÍA ══ -->
 <div class="modal-overlay" id="modalOverlay">
   <div class="modal">
     <div class="modal-header">
@@ -400,7 +1073,9 @@
         </div>
         <div class="form-group" style="margin-bottom:8px" id="accountSelectorWrap">
           <label class="form-label">Cuenta</label>
-          <select id="tradeAccount"></select>
+          <select id="tradeAccount">
+            <option value="">— Sin cuenta —</option>
+          </select>
         </div>
         <button class="btn btn-primary" onclick="addTrade()">+ AGREGAR OPERACIÓN</button>
       </div>
@@ -408,6 +1083,7 @@
   </div>
 </div>
 
+<!-- ══ MODAL: CUENTA ══ -->
 <div class="modal-overlay" id="accountModalOverlay">
   <div class="modal modal-sm">
     <div class="modal-header">
@@ -448,23 +1124,37 @@
 
 <script>
 // ══════════════════════════════════════════════
-//  SUPABASE CONFIGURATION
+//  CONFIG
 // ══════════════════════════════════════════════
-const SUPABASE_URL = "https://cvcqytcmywyajlwuqoog.supabase.co"; 
-const SUPABASE_ANON_KEY = "sb_secret__VOyQ-1BObxa21fT_TgGrw_aX79ZvPM";
+const CFG_KEY = 'tj_supabase_config';
 
-const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+function getConfig(){
+  try{ return JSON.parse(localStorage.getItem(CFG_KEY)||'null'); }catch(e){ return null; }
+}
+function setConfig(url, key){
+  localStorage.setItem(CFG_KEY, JSON.stringify({url, key}));
+}
 
-// Cache global en memoria (reemplaza los arrays locales de localStorage)
-let tradesDb = [];
-let accounts = [];
-let userPin = "Anon";
+// ══════════════════════════════════════════════
+//  SUPABASE CLIENT
+// ══════════════════════════════════════════════
+let sb = null;
 
-let currentSign = 1;
-let activeDay = null;
-let editAccId = null;
-let selectedColor = '#7c6fff';
+function initSupabase(url, key){
+  sb = supabase.createClient(url, key);
+}
+
+// ══════════════════════════════════════════════
+//  STATE
+// ══════════════════════════════════════════════
+let data            = {};
+let accounts        = [];
+let currentSign     = 1;
+let activeDay       = null;
+let editAccId       = null;
+let selectedColor   = '#7c6fff';
 let activeAccountId = null;
+let currentUser     = null;
 
 const ACCOUNT_COLORS = [
   '#7c6fff','#00e676','#ff4444','#ffd740','#00bcd4',
@@ -472,6 +1162,190 @@ const ACCOUNT_COLORS = [
   '#ff5252','#b2ff59'
 ];
 
+// ══════════════════════════════════════════════
+//  PIN HASH
+// ══════════════════════════════════════════════
+async function hashPin(username, pin){
+  const str = username.toLowerCase().trim() + ':' + pin;
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+  return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
+}
+
+// ══════════════════════════════════════════════
+//  TOAST
+// ══════════════════════════════════════════════
+let toastTimer;
+function showToast(msg, type=''){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className   = 'toast show' + (type ? ' '+type : '');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=>{ t.className='toast'; }, 2800);
+}
+
+// ══════════════════════════════════════════════
+//  LOADING
+// ══════════════════════════════════════════════
+function showLoading(msg){
+  document.querySelector('#loadingOverlay .loading-text').textContent = msg || 'CARGANDO...';
+  document.getElementById('loadingOverlay').classList.remove('hidden');
+}
+function hideLoading(){
+  document.getElementById('loadingOverlay').classList.add('hidden');
+}
+
+// ══════════════════════════════════════════════
+//  CONFIG SCREEN
+// ══════════════════════════════════════════════
+async function saveConfig(){
+  const url = document.getElementById('cfgUrl').value.trim();
+  const key = document.getElementById('cfgKey').value.trim();
+  const err = document.getElementById('cfgError');
+  if(!url || !key){ err.textContent='Completá ambos campos.'; err.classList.add('show'); return; }
+  err.classList.remove('show');
+  showLoading('VERIFICANDO...');
+  try {
+    initSupabase(url, key);
+    const {error} = await sb.from('users').select('id').limit(1);
+    if(error && error.code !== 'PGRST116') throw error;
+    setConfig(url, key);
+    document.getElementById('configScreen').classList.add('hidden');
+    hideLoading();
+    showLoginScreen();
+  } catch(e){
+    hideLoading();
+    err.textContent = 'Error de conexión: ' + (e.message||e);
+    err.classList.add('show');
+  }
+}
+
+// ══════════════════════════════════════════════
+//  LOGIN
+// ══════════════════════════════════════════════
+function showLoginScreen(){
+  document.getElementById('loginScreen').classList.remove('hidden');
+  setTimeout(()=>document.getElementById('loginUsername').focus(), 100);
+}
+
+async function doLogin(){
+  const usernameRaw = document.getElementById('loginUsername').value.trim();
+  const pin         = document.getElementById('loginPin').value.trim();
+  const errEl       = document.getElementById('loginError');
+  const btn         = document.getElementById('loginBtn');
+  errEl.classList.remove('show');
+  if(!usernameRaw){ errEl.textContent='Ingresá tu nombre.'; errEl.classList.add('show'); return; }
+  if(!pin){ errEl.textContent='Ingresá tu PIN.'; errEl.classList.add('show'); return; }
+
+  const username = usernameRaw.toLowerCase();
+  btn.disabled = true; btn.textContent = 'VERIFICANDO...';
+
+  try {
+    const hash = await hashPin(username, pin);
+    const {data: existing, error: fetchErr} = await sb
+      .from('users').select('*').eq('username', username).single();
+
+    if(fetchErr && fetchErr.code === 'PGRST116'){
+      const color = ACCOUNT_COLORS[Math.floor(Math.random()*ACCOUNT_COLORS.length)];
+      const {data: newUser, error: insertErr} = await sb
+        .from('users').insert({username, pin_hash: hash, color}).select().single();
+      if(insertErr) throw insertErr;
+      currentUser = newUser;
+      showToast('Bienvenido, '+username+'! Usuario creado.', 'success');
+    } else if(fetchErr){
+      throw fetchErr;
+    } else {
+      if(existing.pin_hash !== hash){
+        errEl.textContent = 'PIN incorrecto.';
+        errEl.classList.add('show');
+        btn.disabled = false; btn.textContent = 'INGRESAR';
+        return;
+      }
+      currentUser = existing;
+      showToast('Bienvenido de vuelta, '+username+'!', 'success');
+    }
+
+    sessionStorage.setItem('tj_user', JSON.stringify(currentUser));
+    document.getElementById('loginScreen').classList.add('hidden');
+    await loadAllData();
+    setupUI();
+
+  } catch(e){
+    errEl.textContent = 'Error: ' + (e.message||e);
+    errEl.classList.add('show');
+  } finally {
+    btn.disabled = false; btn.textContent = 'INGRESAR';
+  }
+}
+
+function doLogout(){
+  sessionStorage.removeItem('tj_user');
+  currentUser = null; data = {}; accounts = [];
+  showLoginScreen();
+}
+
+// ══════════════════════════════════════════════
+//  LOAD DATA FROM SUPABASE
+// ══════════════════════════════════════════════
+async function loadAllData(){
+  showLoading('CARGANDO DATOS...');
+  try {
+    const {data: accs, error: accErr} = await sb.from('accounts').select('*').order('created_at');
+    if(accErr) throw accErr;
+    accounts = accs || [];
+
+    const {data: trades, error: tradeErr} = await sb.from('trades').select('*');
+    if(tradeErr) throw tradeErr;
+
+    data = {};
+    (trades||[]).forEach(t => {
+      const key = t.trade_date;
+      if(!data[key]) data[key] = {trades:[]};
+      data[key].trades.push({
+        id: t.id, amount: t.amount, note: t.note||'',
+        accountId: t.account_id, userId: t.user_id,
+      });
+    });
+  } catch(e){
+    showToast('Error cargando datos: '+(e.message||e), 'error');
+  } finally {
+    hideLoading();
+  }
+}
+
+// ══════════════════════════════════════════════
+//  SETUP UI
+// ══════════════════════════════════════════════
+function setupUI(){
+  const initials = currentUser.username.substring(0,2).toUpperCase();
+  const av = document.getElementById('userAvatar');
+  av.textContent = initials;
+  av.style.background = (currentUser.color||'#7c6fff')+'30';
+  av.style.color      = currentUser.color||'#7c6fff';
+  document.getElementById('userDisplayName').textContent = currentUser.username;
+  buildCalendar();
+  refreshAll();
+  renderAccounts();
+  updateActiveBadge();
+}
+
+// ══════════════════════════════════════════════
+//  DATA HELPERS
+// ══════════════════════════════════════════════
+function getDayKey(y, m, d){ return `${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`; }
+function getDayData(y, m, d){ const k=getDayKey(y,m,d); if(!data[k]) data[k]={trades:[]}; return data[k]; }
+
+// Calendar shows ALL users' trades (collaborative view), filtered by account if selected
+function getFilteredTrades(y, m, d){
+  return getDayData(y,m,d).trades.filter(t =>
+    (!activeAccountId || t.accountId === activeAccountId)
+  );
+}
+function getDayTotal(y, m, d)    { return getFilteredTrades(y,m,d).reduce((s,t)=>s+t.amount,0); }
+function getDayTradeCount(y, m, d){ return getFilteredTrades(y,m,d).length; }
+
+// ══════════════════════════════════════════════
+//  MONTHS
+// ══════════════════════════════════════════════
 const MONTHS = [
   {index:5,  name:'Junio',      year:2026},
   {index:6,  name:'Julio',      year:2026},
@@ -481,101 +1355,17 @@ const MONTHS = [
   {index:10, name:'Noviembre',  year:2026},
   {index:11, name:'Diciembre',  year:2026},
 ];
-
 const DAY_NAMES = ['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'];
-
-// ══════════════════════════════════════════════
-//  INITIALIZATION & SYNC FROM CLOUD
-// ══════════════════════════════════════════════
-
-// Cargar PIN local al iniciar
-function loadLocalPin() {
-  const saved = localStorage.getItem('journal_user_pin');
-  if (saved) {
-    userPin = saved;
-  } else {
-    userPin = "U" + Math.floor(1000 + Math.random() * 9000); // PIN aleatorio inicial si no tiene uno
-    localStorage.setItem('journal_user_pin', userPin);
-  }
-  document.getElementById('userPinInput').value = userPin;
-}
-
-function savePin(val) {
-  if(val.trim()) {
-    userPin = val.trim();
-    localStorage.setItem('journal_user_pin', userPin);
-    refreshAll();
-  }
-}
-
-// Sincronización completa desde Supabase
-async function syncFromCloud() {
-  try {
-    // 1. Descargar Cuentas
-    const { data: cloudAccounts, error: errAcc } = await supabase
-      .from('journal_accounts')
-      .select('*')
-      .order('created_at', { ascending: true });
-    
-    if (errAcc) throw errAcc;
-    accounts = cloudAccounts || [];
-
-    // 2. Descargar todos los Trades de 2026
-    const { data: cloudTrades, error: errTrd } = await supabase
-      .from('journal_trades')
-      .select('*');
-      
-    if (errTrd) throw errTrd;
-    tradesDb = cloudTrades || [];
-
-    // Redibujar todo con la nueva info
-    renderAccounts();
-    refreshAll();
-  } catch (error) {
-    console.error("Error sincronizando datos desde Supabase:", error.message);
-  }
-}
-
-// Suscripción en Tiempo Real para detectar cambios de otras IPs inmediatamente
-function setupRealtime() {
-  supabase
-    .channel('schema-db-changes')
-    .on('postgres_changes', { event: '*', schema: 'public', table: 'journal_accounts' }, () => syncFromCloud())
-    .on('postgres_changes', { event: '*', schema: 'public', table: 'journal_trades' }, () => syncFromCloud())
-    .subscribe();
-}
-
-// Helpers de mapeo de datos locales calculados a demanda
-function getDayKey(y, m, d) { 
-  return `${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`; 
-}
-
-function getFilteredTrades(y, m, d) {
-  const k = getDayKey(y, m, d);
-  return tradesDb.filter(t => t.day_key === k && (!activeAccountId || t.account_id === activeAccountId));
-}
-
-function getDayTotal(y, m, d) { 
-  return getFilteredTrades(y, m, d).reduce((s, t) => s + parseFloat(t.amount), 0); 
-}
-
-function getDayTradeCount(y, m, d) { 
-  return getFilteredTrades(y, m, d).length; 
-}
-
-function computeAccountPnl(accId) {
-  return tradesDb.filter(t => t.account_id === accId).reduce((s, t) => s + parseFloat(t.amount), 0);
-}
-
-// ══════════════════════════════════════════════
-//  FORMAT & INTERFACE HELPERS
-// ══════════════════════════════════════════════
-function getDaysInMonth(y,m)   { return new Date(y,m+1,0).getDate(); }
+function getDaysInMonth(y,m)    { return new Date(y,m+1,0).getDate(); }
 function getFirstDayOfMonth(y,m){ let d=new Date(y,m,1).getDay(); return d===0?6:d-1; }
-function formatPnl(val, compact) {
-  if (val===0) return '$0.00';
-  const abs = Math.abs(val);
-  let str = compact && abs>=1000 ? '$'+(abs/1000).toFixed(1)+'k' : '$'+abs.toFixed(2);
+
+// ══════════════════════════════════════════════
+//  FORMAT
+// ══════════════════════════════════════════════
+function formatPnl(val, compact){
+  if(val===0) return '$0.00';
+  const abs=Math.abs(val);
+  let str=compact&&abs>=1000?'$'+(abs/1000).toFixed(1)+'k':'$'+abs.toFixed(2);
   return (val<0?'-':'+')+str;
 }
 function pnlClass(val){ return val>0?'positive':val<0?'negative':'zero'; }
@@ -583,94 +1373,50 @@ function uid(){ return Date.now().toString(36)+Math.random().toString(36).slice(
 function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
 // ══════════════════════════════════════════════
-//  CALENDAR GENERATION
+//  CALENDAR
 // ══════════════════════════════════════════════
-function buildCalendar() {
-  const tabsEl  = document.getElementById('monthTabs');
-  const viewsEl = document.getElementById('monthViews');
-  tabsEl.innerHTML  = '';
-  viewsEl.innerHTML = '';
-
-  MONTHS.forEach((m,mi) => {
-    const tab = document.createElement('button');
-    tab.className = 'month-tab'+(mi===0?' active':'');
-    tab.textContent = m.name;
-    tab.onclick = ()=>switchMonth(mi);
+function buildCalendar(){
+  const tabsEl=document.getElementById('monthTabs');
+  const viewsEl=document.getElementById('monthViews');
+  tabsEl.innerHTML=''; viewsEl.innerHTML='';
+  MONTHS.forEach((m,mi)=>{
+    const tab=document.createElement('button');
+    tab.className='month-tab'+(mi===0?' active':'');
+    tab.textContent=m.name;
+    tab.onclick=()=>switchMonth(mi);
     tabsEl.appendChild(tab);
-
-    const view = document.createElement('div');
-    view.className = 'month-view'+(mi===0?' active':'');
-    view.id = `month-${mi}`;
-    view.innerHTML = buildMonthHTML(m,mi);
+    const view=document.createElement('div');
+    view.className='month-view'+(mi===0?' active':'');
+    view.id=`month-${mi}`;
+    view.innerHTML=buildMonthHTML(m,mi);
     viewsEl.appendChild(view);
   });
 }
 
-function buildMonthHTML(m, mi) {
-  const {year,index:month,name} = m;
-  const daysInMonth = getDaysInMonth(year,month);
-  const firstDay    = getFirstDayOfMonth(year,month);
-
-  let rows=[], row=[], weekNum=1;
+function buildMonthHTML(m, mi){
+  const {year,index:month,name}=m;
+  const daysInMonth=getDaysInMonth(year,month);
+  const firstDay=getFirstDayOfMonth(year,month);
+  let rows=[],row=[],weekNum=1;
   for(let i=0;i<firstDay;i++) row.push({type:'empty'});
   for(let d=1;d<=daysInMonth;d++){
     const dow=(firstDay+d-1)%7;
     row.push({type:'day',day:d,dow});
-    if(dow===6||d===daysInMonth){
-      while(row.length<7) row.push({type:'empty'});
-      rows.push({cells:row,weekNum});
-      row=[]; weekNum++;
-    }
+    if(dow===6||d===daysInMonth){ while(row.length<7) row.push({type:'empty'}); rows.push({cells:row,weekNum}); row=[]; weekNum++; }
   }
-
-  let html=`
-    <div class="month-header">
-      <div>
-        <div class="month-title">${name} <span style="color:var(--text-muted);font-size:18px">2026</span></div>
-        <div class="month-win-loss">
-          <span class="badge badge-green" id="wins-${mi}">0 Wins</span>
-          <span class="badge badge-red"   id="loss-${mi}">0 Loss</span>
-        </div>
-      </div>
-      <div class="month-summary">
-        <div class="summary-item">
-          <div class="summary-item-label">P&L MENSUAL</div>
-          <div class="summary-item-value zero" id="mpnl-${mi}">$0.00</div>
-        </div>
-        <div class="summary-item">
-          <div class="summary-item-label">OPERACIONES</div>
-          <div class="summary-item-value neutral" id="mtrades-${mi}">0</div>
-        </div>
-      </div>
-    </div>
-    <div class="calendar-grid">
-      ${DAY_NAMES.map(d=>`<div class="cal-header">${d}</div>`).join('')}
-      <div class="cal-header week-header">SEM.</div>`;
-
-  rows.forEach((r,ri) => {
-    r.cells.forEach(cell => {
-      if(cell.type==='empty'){
-        html+=`<div class="day-cell empty"></div>`;
-      } else {
+  let html=`<div class="month-header"><div><div class="month-title">${name} <span style="color:var(--text-muted);font-size:18px">2026</span></div><div class="month-win-loss"><span class="badge badge-green" id="wins-${mi}">0 Wins</span><span class="badge badge-red" id="loss-${mi}">0 Loss</span></div></div><div class="month-summary"><div class="summary-item"><div class="summary-item-label">P&L MENSUAL</div><div class="summary-item-value zero" id="mpnl-${mi}">$0.00</div></div><div class="summary-item"><div class="summary-item-label">OPERACIONES</div><div class="summary-item-value neutral" id="mtrades-${mi}">0</div></div></div></div><div class="calendar-grid">${DAY_NAMES.map(d=>`<div class="cal-header">${d}</div>`).join('')}<div class="cal-header week-header">SEM.</div>`;
+  rows.forEach((r,ri)=>{
+    r.cells.forEach(cell=>{
+      if(cell.type==='empty'){ html+=`<div class="day-cell empty"></div>`; }
+      else {
         const today=new Date();
         const isToday=today.getFullYear()===year&&today.getMonth()===month&&today.getDate()===cell.day;
         const isWknd=cell.dow>=5;
-        html+=`<div class="day-cell${isToday?' today':''}${isWknd?' weekend':''}"
-          id="cell-${mi}-${cell.day}" onclick="openModal(${mi},${cell.day})">
-          <div class="day-number">${cell.day}</div>
-          <div class="day-pnl zero" id="dpnl-${mi}-${cell.day}">—</div>
-          <div class="day-trades" id="dtrades-${mi}-${cell.day}"></div>
-          <div class="day-add-btn">+</div>
-        </div>`;
+        html+=`<div class="day-cell${isToday?' today':''}${isWknd?' weekend':''}" id="cell-${mi}-${cell.day}" onclick="openModal(${mi},${cell.day})"><div class="day-number">${cell.day}</div><div class="day-pnl zero" id="dpnl-${mi}-${cell.day}">—</div><div class="day-trades" id="dtrades-${mi}-${cell.day}"></div><div class="day-add-btn">+</div></div>`;
       }
     });
-    html+=`<div class="week-cell">
-      <div class="week-label">Sem ${r.weekNum}</div>
-      <div class="week-pnl zero" id="wpnl-${mi}-${ri}">$0.00</div>
-      <div class="week-days-count" id="wdays-${mi}-${ri}">0 días</div>
-    </div>`;
+    html+=`<div class="week-cell"><div class="week-label">Sem ${r.weekNum}</div><div class="week-pnl zero" id="wpnl-${mi}-${ri}">$0.00</div><div class="week-days-count" id="wdays-${mi}-${ri}">0 días</div></div>`;
   });
-
   html+=`</div>`;
   return html;
 }
@@ -681,7 +1427,7 @@ function switchMonth(mi){
 }
 
 // ══════════════════════════════════════════════
-//  UI UPDATES USING LOCAL CACHE
+//  UPDATE CELLS
 // ══════════════════════════════════════════════
 function updateDayCell(mi,day){
   const m=MONTHS[mi];
@@ -693,11 +1439,9 @@ function updateDayCell(mi,day){
   if(!pnlEl) return;
   cellEl.classList.remove('positive','negative');
   pnlEl.className='day-pnl';
-  if(count===0){
-    pnlEl.textContent='—'; pnlEl.classList.add('zero'); tradesEl.textContent='';
-  } else {
-    pnlEl.textContent=formatPnl(total,true);
-    pnlEl.classList.add(pnlClass(total));
+  if(count===0){ pnlEl.textContent='—'; pnlEl.classList.add('zero'); tradesEl.textContent=''; }
+  else {
+    pnlEl.textContent=formatPnl(total,true); pnlEl.classList.add(pnlClass(total));
     tradesEl.textContent=`${count} trade${count>1?'s':''}`;
     if(total>0) cellEl.classList.add('positive');
     else if(total<0) cellEl.classList.add('negative');
@@ -709,7 +1453,6 @@ function updateMonthStats(mi){
   const daysInMonth=getDaysInMonth(m.year,m.index);
   const firstDay=getFirstDayOfMonth(m.year,m.index);
   let monthTotal=0,monthTrades=0,wins=0,losses=0,row=[],weekNum=0;
-
   for(let d=1;d<=daysInMonth;d++){
     const dow=(firstDay+d-1)%7;
     row.push(d);
@@ -727,7 +1470,6 @@ function updateMonthStats(mi){
       row=[]; weekNum++;
     }
   }
-
   const mpEl=document.getElementById(`mpnl-${mi}`);
   const mtEl=document.getElementById(`mtrades-${mi}`);
   const wEl=document.getElementById(`wins-${mi}`);
@@ -751,14 +1493,7 @@ function updateYearStats(){
   });
   const pEl=document.getElementById('yearPnl');
   const lEl2=document.getElementById('yearPnlLabel');
-  if(lEl2){
-    if(activeAccountId){
-      const acc=accounts.find(a=>a.id===activeAccountId);
-      lEl2.textContent = acc ? acc.name : 'P&L 2026';
-    } else {
-      lEl2.textContent = 'P&L 2026';
-    }
-  }
+  if(lEl2){ lEl2.textContent=activeAccountId?(accounts.find(a=>a.id===activeAccountId)?.name||'P&L 2026'):'P&L 2026'; }
   pEl.textContent=formatPnl(total,true);
   pEl.className='sidebar-stat-value '+pnlClass(total);
   document.getElementById('yearTrades').textContent=trades;
@@ -775,87 +1510,48 @@ function refreshAll(){
 }
 
 // ══════════════════════════════════════════════
-//  ACCOUNTS ACTIONS (SUPABASE INTEGRATED)
+//  ACCOUNTS
 // ══════════════════════════════════════════════
 function selectAccount(id){
-  activeAccountId = (activeAccountId === id) ? null : id;
-  renderAccounts();
-  refreshAll();
-  updateActiveBadge();
+  activeAccountId=(activeAccountId===id)?null:id;
+  renderAccounts(); refreshAll(); updateActiveBadge();
 }
 
 function updateActiveBadge(){
-  const dot  = document.getElementById('activeAccountDot');
-  const name = document.getElementById('activeAccountName');
-  if(activeAccountId){
-    const acc = accounts.find(a=>a.id===activeAccountId);
-    if(acc){
-      dot.style.background  = acc.color || '#7c6fff';
-      name.textContent = acc.name;
-      return;
-    }
-  }
-  dot.style.background = '#7c6fff';
-  name.textContent = 'Todas las cuentas';
+  const dot=document.getElementById('activeAccountDot');
+  const name=document.getElementById('activeAccountName');
+  if(activeAccountId){ const acc=accounts.find(a=>a.id===activeAccountId); if(acc){ dot.style.background=acc.color||'#7c6fff'; name.textContent=acc.name; return; } }
+  dot.style.background='#7c6fff'; name.textContent='Todas las cuentas';
+}
+
+function computeAccountPnl(accId){
+  let total=0;
+  Object.values(data).forEach(dayObj=>{
+    (dayObj.trades||[]).forEach(t=>{
+      if(t.accountId===accId) total+=t.amount;
+    });
+  });
+  return total;
 }
 
 function renderAccounts(){
   const list=document.getElementById('accountsList');
   list.innerHTML='';
-
-  if(accounts.length===0){
-    list.innerHTML='<div class="empty-accounts">Sin cuentas activas.<br>Agregá una abajo.</div>';
-    updateAccountSelector();
-    return;
-  }
-
+  if(accounts.length===0){ list.innerHTML='<div class="empty-accounts">Sin cuentas.<br>Agregá una abajo.</div>'; updateAccountSelector(); return; }
   accounts.forEach(acc=>{
-    const balance = parseFloat(acc.balance)||0;
-    const target  = parseFloat(acc.target)||0;
-    const pnl     = computeAccountPnl(acc.id);
-    const current = balance + pnl;
-    let progressPct = 0;
-    
-    if(target>0 && target>balance){
-      progressPct=Math.min(100,Math.max(0,(pnl/(target-balance))*100));
-    } else if(target>0 && target<=balance){
-      progressPct=100;
-    }
-
+    const balance=parseFloat(acc.balance)||0;
+    const target=parseFloat(acc.target)||0;
+    const pnl=computeAccountPnl(acc.id);
+    const current=balance+pnl;
+    let progressPct=0;
+    if(target>0&&target>balance) progressPct=Math.min(100,Math.max(0,(pnl/(target-balance))*100));
+    else if(target>0&&target<=balance) progressPct=100;
     const card=document.createElement('div');
     card.className='account-card'+(activeAccountId===acc.id?' active':'');
     card.onclick=(e)=>{ if(!e.target.closest('.account-action-btn')) selectAccount(acc.id); };
-    card.innerHTML=`
-      <div class="account-card-top">
-        <div class="account-name-row">
-          <div class="account-dot" style="background:${acc.color||'#7c6fff'}"></div>
-          <div class="account-name">${esc(acc.name)}</div>
-        </div>
-        <div class="account-actions">
-          <button class="account-action-btn" onclick="openAccountModal('${acc.id}')" title="Editar">✏</button>
-          <button class="account-action-btn del" onclick="confirmDeleteAccount('${acc.id}')" title="Eliminar">🗑</button>
-        </div>
-      </div>
-      ${acc.broker?`<div class="account-broker">${esc(acc.broker)}</div>`:''}
-      <div class="account-balance-row">
-        <span class="account-balance-label">BALANCE ACTUAL</span>
-        <span class="account-balance" style="color:${acc.color||'#7c6fff'}">$${current.toFixed(2)}</span>
-      </div>
-      <div class="account-pnl-row">
-        <span class="account-pnl-label">P&L TRADES</span>
-        <span class="account-pnl ${pnlClass(pnl)}">${formatPnl(pnl,false)}</span>
-      </div>
-      ${target>0?`
-      <div class="account-progress-bar" style="margin-top:8px">
-        <div class="account-progress-fill" style="width:${progressPct}%;background:${acc.color||'#7c6fff'}"></div>
-      </div>
-      <div style="font-size:9px;color:var(--text-dim);font-family:'Space Mono',monospace;margin-top:3px;text-align:right">
-        Obj: $${target.toFixed(2)} · ${progressPct.toFixed(1)}%
-      </div>`:''}
-    `;
+    card.innerHTML=`<div class="account-card-top"><div class="account-name-row"><div class="account-dot" style="background:${acc.color||'#7c6fff'}"></div><div class="account-name">${esc(acc.name)}</div></div><div class="account-actions"><button class="account-action-btn" onclick="openAccountModal('${acc.id}')" title="Editar">✏</button><button class="account-action-btn del" onclick="confirmDeleteAccount('${acc.id}')" title="Eliminar">🗑</button></div></div>${acc.broker?`<div class="account-broker">${esc(acc.broker)}</div>`:''}<div class="account-balance-row"><span class="account-balance-label">BALANCE ACTUAL</span><span class="account-balance" style="color:${acc.color||'#7c6fff'}">$${current.toFixed(2)}</span></div><div class="account-pnl-row"><span class="account-pnl-label">P&L TRADES</span><span class="account-pnl ${pnlClass(pnl)}">${formatPnl(pnl,false)}</span></div>${target>0?`<div class="account-progress-bar"><div class="account-progress-fill" style="width:${progressPct}%;background:${acc.color||'#7c6fff'}"></div></div><div style="font-size:9px;color:var(--text-dim);font-family:'Space Mono',monospace;margin-top:3px;text-align:right">Obj: $${target.toFixed(2)} · ${progressPct.toFixed(1)}%</div>`:''}`;
     list.appendChild(card);
   });
-
   updateAccountSelector();
 }
 
@@ -864,21 +1560,24 @@ function updateAccountSelector(){
   if(!sel) return;
   const prev=sel.value;
   sel.innerHTML='<option value="">— Sin cuenta —</option>';
-  accounts.forEach(acc=>{
-    const opt=document.createElement('option');
-    opt.value=acc.id;
-    opt.textContent=acc.name+(acc.broker?' ('+acc.broker+')':'');
-    sel.appendChild(opt);
-  });
-  if(prev && accounts.find(a=>a.id===prev)) sel.value=prev;
+  accounts.forEach(acc=>{ const opt=document.createElement('option'); opt.value=acc.id; opt.textContent=acc.name+(acc.broker?' ('+acc.broker+')':''); sel.appendChild(opt); });
+  if(prev&&accounts.find(a=>a.id===prev)) sel.value=prev;
   const wrap=document.getElementById('accountSelectorWrap');
   if(wrap) wrap.style.display=accounts.length===0?'none':'flex';
+}
+
+// ══════════════════════════════════════════════
+//  ACCOUNT MODAL
+// ══════════════════════════════════════════════
+function buildColorPicker(selected){
+  const el=document.getElementById('colorPicker');
+  el.innerHTML='';
+  ACCOUNT_COLORS.forEach(c=>{ const d=document.createElement('div'); d.className='color-dot'+(c===selected?' selected':''); d.style.background=c; d.onclick=()=>{ selectedColor=c; buildColorPicker(c); }; el.appendChild(d); });
 }
 
 function openAccountModal(id){
   editAccId=id||null;
   document.getElementById('accountDeleteBox').innerHTML='';
-
   if(id){
     const acc=accounts.find(a=>a.id===id);
     if(!acc) return;
@@ -900,22 +1599,9 @@ function openAccountModal(id){
     selectedColor='#7c6fff';
     document.getElementById('accountSaveBtn').textContent='GUARDAR CUENTA';
   }
-
   buildColorPicker(selectedColor);
   document.getElementById('accountModalOverlay').classList.add('open');
   document.getElementById('accName').focus();
-}
-
-function buildColorPicker(selected){
-  const el=document.getElementById('colorPicker');
-  el.innerHTML='';
-  ACCOUNT_COLORS.forEach(c=>{
-    const d=document.createElement('div');
-    d.className='color-dot'+(c===selected?' selected':'');
-    d.style.background=c;
-    d.onclick=()=>{ selectedColor=c; buildColorPicker(c); };
-    el.appendChild(d);
-  });
 }
 
 function closeAccountModal(){
@@ -929,18 +1615,19 @@ async function saveAccount(){
   const broker=document.getElementById('accBroker').value.trim();
   const balance=parseFloat(document.getElementById('accBalance').value)||0;
   const target=parseFloat(document.getElementById('accTarget').value)||0;
-
-  const payload = { name, broker, balance, target, color: selectedColor };
-
-  if(editAccId){
-    await supabase.from('journal_accounts').update(payload).eq('id', editAccId);
-  } else {
-    payload.id = uid();
-    await supabase.from('journal_accounts').insert([payload]);
-  }
-
-  closeAccountModal();
-  await syncFromCloud();
+  try {
+    if(editAccId){
+      const {error}=await sb.from('accounts').update({name,broker,balance,target,color:selectedColor}).eq('id',editAccId);
+      if(error) throw error;
+      const idx=accounts.findIndex(a=>a.id===editAccId);
+      if(idx>=0) accounts[idx]={...accounts[idx],name,broker,balance,target,color:selectedColor};
+    } else {
+      const {data:newAcc,error}=await sb.from('accounts').insert({name,broker,balance,target,color:selectedColor}).select().single();
+      if(error) throw error;
+      accounts.push(newAcc);
+    }
+    renderAccounts(); closeAccountModal(); showToast('Cuenta guardada','success');
+  } catch(e){ showToast('Error: '+(e.message||e),'error'); }
 }
 
 function confirmDeleteAccount(id){
@@ -948,41 +1635,36 @@ function confirmDeleteAccount(id){
   if(!acc) return;
   openAccountModal(id);
   const box=document.getElementById('accountDeleteBox');
-  box.innerHTML=`
-    <div class="confirm-box">
-      <p>¿Eliminar <strong>${esc(acc.name)}</strong>? Se borrarán sus trades asociados en la nube.</p>
-      <div class="confirm-btns">
-        <button class="btn btn-cancel" onclick="closeAccountModal()">Cancelar</button>
-        <button class="btn btn-danger" onclick="doDeleteAccount('${id}')">Eliminar</button>
-      </div>
-    </div>`;
+  box.innerHTML=`<div class="confirm-box"><p>Eliminar <strong>${esc(acc.name)}</strong>? Esta accion no se puede deshacer.</p><div class="confirm-btns"><button class="btn btn-cancel" onclick="closeAccountModal()">Cancelar</button><button class="btn btn-danger" onclick="doDeleteAccount('${id}')">Eliminar</button></div></div>`;
   document.getElementById('accountSaveBtn').style.display='none';
 }
 
 async function doDeleteAccount(id){
-  await supabase.from('journal_accounts').delete().eq('id', id);
-  closeAccountModal();
-  document.getElementById('accountSaveBtn').style.display='';
-  await syncFromCloud();
+  try {
+    const {error}=await sb.from('accounts').delete().eq('id',id);
+    if(error) throw error;
+    accounts=accounts.filter(a=>a.id!==id);
+    renderAccounts(); closeAccountModal();
+    document.getElementById('accountSaveBtn').style.display='';
+    showToast('Cuenta eliminada','success');
+  } catch(e){ showToast('Error: '+(e.message||e),'error'); }
 }
 
 // ══════════════════════════════════════════════
-//  TRADES ACTIONS (SUPABASE INTEGRATED WITH USER PIN)
+//  TRADES MODAL
 // ══════════════════════════════════════════════
-function openModal(mi,day){
+function openModal(mi, day){
   activeDay={mi,day,year:MONTHS[mi].year,month:MONTHS[mi].index};
   currentSign=1; updateSignButtons();
-
   const m=MONTHS[mi];
   const dateObj=new Date(m.year,m.index,day);
-  const dayNames=['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
+  const dayNames=['Domingo','Lunes','Martes','Miercoles','Jueves','Viernes','Sabado'];
   const monthNames=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
   document.getElementById('modalTitle').textContent=`${dayNames[dateObj.getDay()]} ${day}`;
   document.getElementById('modalDate').textContent=`${monthNames[m.index]} ${m.year}`;
   document.getElementById('tradeAmount').value='';
   document.getElementById('tradeNote').value='';
   updateAccountSelector();
-
   renderModalTrades();
   document.getElementById('modalOverlay').classList.add('open');
   document.getElementById('tradeAmount').focus();
@@ -996,39 +1678,26 @@ function closeModal(){
 function renderModalTrades(){
   if(!activeDay) return;
   const {mi,day,year,month}=activeDay;
-  const visibleTrades = getFilteredTrades(year, month, day);
-  const total=visibleTrades.reduce((s,t)=>s+parseFloat(t.amount),0);
+  const d=getDayData(year,month,day);
+  // Show all users' trades in modal; delete button only shown for own trades
+  const allTrades=d.trades.map((t,i)=>({...t,_origIndex:i}));
+  const visibleTrades=activeAccountId?allTrades.filter(t=>t.accountId===activeAccountId):allTrades;
+  const total=visibleTrades.reduce((s,t)=>s+t.amount,0);
   const count=visibleTrades.length;
-
   document.getElementById('modalTotalValue').textContent=formatPnl(total,false);
   document.getElementById('modalTotalValue').className='modal-total-value '+pnlClass(total);
-  document.getElementById('modalTotalTrades').textContent=`${count} operación${count!==1?'es':''}`;
-
+  document.getElementById('modalTotalTrades').textContent=`${count} operacion${count!==1?'es':''}`;
   const list=document.getElementById('tradesList');
   list.innerHTML='';
-
-  if(count===0){
-    list.innerHTML='<div style="text-align:center;color:var(--text-dim);font-family:Space Mono,monospace;font-size:11px;padding:16px">Sin operaciones aún</div>';
-    return;
-  }
-
+  if(count===0){ list.innerHTML='<div style="text-align:center;color:var(--text-dim);font-family:Space Mono,monospace;font-size:11px;padding:16px">Sin operaciones aun</div>'; return; }
   visibleTrades.forEach((t,i)=>{
-    const acc = accounts.find(a=>a.id===t.account_id);
-    const accName = acc ? acc.name : '';
-    const accColor = acc ? acc.color : '';
+    const accName=t.accountId&&accounts.find(a=>a.id===t.accountId)?.name||'';
+    const accColor=t.accountId&&accounts.find(a=>a.id===t.accountId)?.color||'';
     const el=document.createElement('div');
     el.className='trade-item '+(t.amount>=0?'positive-trade':'negative-trade');
-    
-    // Mostramos la nota del trade y quién lo subió (PIN)
-    el.innerHTML=`
-      <span class="trade-num">#${i+1}</span>
-      <span class="trade-amount-display ${t.amount>=0?'positive':'negative'}">${formatPnl(parseFloat(t.amount),false)}</span>
-      <span class="trade-note-display">
-        ${esc(t.note||'')} 
-        <span style="color:var(--text-muted);font-size:9px">[PIN: ${esc(t.user_pin)}]</span>
-        ${accName?` <span style="color:${accColor||'var(--accent)'};font-size:9px">· ${esc(accName)}</span>`:''}
-      </span>
-      <button class="trade-delete" onclick="deleteTrade('${t.id}')" title="Eliminar">✕</button>`;
+    const isOwn = t.userId === currentUser.id;
+    // Find trade owner username
+    el.innerHTML=`<span class="trade-num">#${i+1}</span><span class="trade-amount-display ${t.amount>=0?'positive':'negative'}">${formatPnl(t.amount,false)}</span><span class="trade-note-display">${esc(t.note||'')}${accName?` <span style="color:${accColor||'var(--accent)'};font-size:9px">· ${esc(accName)}</span>`:''}</span>${isOwn?`<button class="trade-delete" onclick="deleteTrade('${t.id}')" title="Eliminar">x</button>`:'<span style="width:20px;display:inline-block"></span>'}`;
     list.appendChild(el);
   });
 }
@@ -1042,62 +1711,73 @@ function setQuick(a){ document.getElementById('tradeAmount').value=a; }
 
 async function addTrade(){
   if(!activeDay) return;
-  const {mi,day,year,month}=activeDay;
+  const {day,year,month}=activeDay;
   const raw=parseFloat(document.getElementById('tradeAmount').value);
   if(isNaN(raw)||raw<=0){ document.getElementById('tradeAmount').focus(); return; }
   const amount=raw*currentSign;
   const note=document.getElementById('tradeNote').value.trim();
   const accountId=document.getElementById('tradeAccount').value||null;
-  const day_key=getDayKey(year,month,day);
-
-  // Guardar en Supabase incluyendo el PIN del usuario actual
-  await supabase.from('journal_trades').insert([{
-    account_id: accountId,
-    day_key: day_key,
-    amount: amount,
-    note: note,
-    user_pin: userPin
-  }]);
-
-  document.getElementById('tradeAmount').value='';
-  document.getElementById('tradeNote').value='';
-  document.getElementById('tradeAmount').focus();
-  
-  await syncFromCloud();
-  renderModalTrades();
+  const tradeDate=getDayKey(year,month,day);
+  try {
+    const {data:newTrade,error}=await sb.from('trades').insert({
+      trade_date:tradeDate, amount, note, account_id:accountId, user_id:currentUser.id
+    }).select().single();
+    if(error) throw error;
+    if(!data[tradeDate]) data[tradeDate]={trades:[]};
+    data[tradeDate].trades.push({id:newTrade.id,amount:newTrade.amount,note:newTrade.note||'',accountId:newTrade.account_id,userId:newTrade.user_id});
+    document.getElementById('tradeAmount').value='';
+    document.getElementById('tradeNote').value='';
+    document.getElementById('tradeAmount').focus();
+    const {mi}=activeDay;
+    renderModalTrades();
+    updateDayCell(mi,day);
+    updateMonthStats(mi);
+    updateYearStats();
+    renderAccounts();
+  } catch(e){ showToast('Error al guardar: '+(e.message||e),'error'); }
 }
 
-async function deleteTrade(id){
-  if(confirm("¿Seguro que querés eliminar esta operación de la base de datos?")) {
-    await supabase.from('journal_trades').delete().eq('id', id);
-    await syncFromCloud();
-    renderModalTrades();
-  }
+async function deleteTrade(tradeId){
+  if(!activeDay) return;
+  const {mi,day,year,month}=activeDay;
+  const tradeDate=getDayKey(year,month,day);
+  try {
+    const {error}=await sb.from('trades').delete().eq('id',tradeId).eq('user_id',currentUser.id);
+    if(error) throw error;
+    if(data[tradeDate]) data[tradeDate].trades=data[tradeDate].trades.filter(t=>t.id!==tradeId);
+    renderModalTrades(); updateDayCell(mi,day); updateMonthStats(mi); updateYearStats(); renderAccounts();
+  } catch(e){ showToast('Error al eliminar: '+(e.message||e),'error'); }
 }
 
 // ══════════════════════════════════════════════
-//  SHORTCUTS & OVERLAYS
+//  KEYBOARD
 // ══════════════════════════════════════════════
 document.addEventListener('keydown',e=>{
   if(e.key==='Escape'){ closeModal(); closeAccountModal(); }
-  if(e.key==='Enter'&&document.getElementById('modalOverlay').classList.contains('open')){
-    const f=document.activeElement; if(f.id==='tradeAmount'||f.id==='tradeNote') addTrade();
-  }
-  if(e.key==='Enter'&&document.getElementById('accountModalOverlay').classList.contains('open')){
-    const f=document.activeElement; if(['accName','accBroker','accBalance','accTarget'].includes(f.id)) saveAccount();
-  }
+  if(e.key==='Enter'&&document.getElementById('modalOverlay').classList.contains('open')){ const f=document.activeElement; if(f.id==='tradeAmount'||f.id==='tradeNote') addTrade(); }
+  if(e.key==='Enter'&&document.getElementById('accountModalOverlay').classList.contains('open')){ const f=document.activeElement; if(['accName','accBroker','accBalance','accTarget'].includes(f.id)) saveAccount(); }
+  if(e.key==='Enter'&&!document.getElementById('loginScreen').classList.contains('hidden')){ const f=document.activeElement; if(f.id==='loginUsername'||f.id==='loginPin') doLogin(); }
 });
 
 document.getElementById('modalOverlay').addEventListener('click',e=>{ if(e.target===e.currentTarget) closeModal(); });
 document.getElementById('accountModalOverlay').addEventListener('click',e=>{ if(e.target===e.currentTarget) closeAccountModal(); });
 
 // ══════════════════════════════════════════════
-//  INITIALIZATION EXECUTION
+//  INIT
 // ══════════════════════════════════════════════
-loadLocalPin();
-buildCalendar();
-syncFromCloud(); // Carga inicial desde la nube
-setupRealtime(); // Activación de escucha en tiempo real
+async function init(){
+  const savedUser=sessionStorage.getItem('tj_user');
+  const cfg=getConfig();
+  if(!cfg){ hideLoading(); document.getElementById('configScreen').classList.remove('hidden'); return; }
+  initSupabase(cfg.url,cfg.key);
+  if(savedUser){
+    try { currentUser=JSON.parse(savedUser); await loadAllData(); setupUI(); }
+    catch(e){ sessionStorage.removeItem('tj_user'); hideLoading(); showLoginScreen(); }
+  } else { hideLoading(); showLoginScreen(); }
+}
+
+init();
+
 </script>
 </body>
 </html>
